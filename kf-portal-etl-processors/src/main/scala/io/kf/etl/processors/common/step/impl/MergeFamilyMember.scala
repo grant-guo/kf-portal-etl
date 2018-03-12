@@ -2,8 +2,8 @@ package io.kf.etl.processors.common.step.impl
 
 import io.kf.etl.dbschema.TFamilyRelationship
 import io.kf.etl.model.{Family, FamilyData, FamilyMember, Participant}
-import io.kf.etl.processors.common.ProcessorCommonDefinitions.FamilyMemberRelation
 import io.kf.etl.processors.common.step.StepExecutable
+import io.kf.etl.processors.common.step.impl.MergeFamilyMember.FamilyMemberRelation
 import io.kf.etl.processors.filecentric.transform.steps.context.StepContext
 import org.apache.spark.sql.Dataset
 
@@ -12,7 +12,24 @@ class MergeFamilyMember(override val ctx:StepContext) extends StepExecutable[Dat
 
     import ctx.spark.implicits._
 
-    val family_relations = MergeFamilyMemberHelper.familyMemberRelationship(ctx, participants, ctx.dbTables.familyRelationship)
+    val flattenedFamilyRelationship =
+      ctx.dbTables.familyRelationship.flatMap(tf => {
+        Seq(
+          tf,
+          TFamilyRelationship(
+            kfId = tf.kfId,
+            uuid = tf.uuid,
+            createdAt = tf.createdAt,
+            modifiedAt = tf.modifiedAt,
+            participantId = tf.relativeId,
+            relativeId = tf.participantId,
+            relativeToParticipantRelation = tf.participantToRelativeRelation,
+            participantToRelativeRelation = tf.relativeToParticipantRelation
+          )
+        )
+      })
+
+    val family_relations = MergeFamilyMemberHelper.familyMemberRelationship(ctx, participants, flattenedFamilyRelationship)
 
     val ds =
     participants.joinWith(ctx.dbTables.participantGenomicFile, participants.col("kfId") === ctx.dbTables.participantGenomicFile.col("kfId"), "left").map(tuple => {
@@ -38,6 +55,11 @@ class MergeFamilyMember(override val ctx:StepContext) extends StepExecutable[Dat
 
     })
   }
+
+}
+
+object MergeFamilyMember{
+  case class FamilyMemberRelation(kfId:String, relative: Participant, relativeToParcitipantRelation: Option[String])
 
 }
 
