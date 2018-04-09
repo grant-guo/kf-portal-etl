@@ -29,20 +29,24 @@ lazy val commonSettings = Seq(
     case PathList("org", "apache", "hadoop", xs @ _*) => MergeStrategy.last
     case PathList("org", "aopalliance", xs @ _*) => MergeStrategy.last
     case PathList("org", "apache", "spark", "unused", xs @ _*) => MergeStrategy.last
+    case PathList("javax", "annotation", xs @ _*) => MergeStrategy.first
     case "META-INF/io.netty.versions.properties" => MergeStrategy.last
     case "overview.html" => MergeStrategy.last
+    case "git.properties" => MergeStrategy.discard
     case x =>
       val oldStrategy = (assemblyMergeStrategy in assembly).value
       oldStrategy(x)
   }
 )
 
-lazy val root = (project in file(".")).aggregate(model, common, processors)
+lazy val root = (project in file(".")).aggregate(model, common, processors, pipeline)
 
 lazy val model = (project in file("kf-portal-etl-model")).settings(commonSettings:_*)
 
 lazy val common = (project in file("kf-portal-etl-common")).dependsOn(model).settings(commonSettings:_*)
 
 lazy val processors = (project in file("kf-portal-etl-processors")).dependsOn(common%"test->test;compile->compile").settings(commonSettings:_*)
+
+lazy val pipeline = (project in file("kf-portal-etl-pipeline")).dependsOn(processors).settings(commonSettings:_*)
 
 
