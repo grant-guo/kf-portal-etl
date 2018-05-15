@@ -15,7 +15,8 @@ object PBEntityConverter {
       version = study.version,
       externalId = study.externalId,
       releaseStatus = study.releaseStatus,
-      dataAccessAuthority = study.dataAccessAuthority
+      dataAccessAuthority = study.dataAccessAuthority,
+      shortName = study.shortName
     )
   }
   
@@ -40,7 +41,6 @@ object PBEntityConverter {
     Biospecimen_ES(
       ageAtEventDays = bio.ageAtEventDays,
       analyteType = bio.analyteType,
-      anatomicalSite = bio.anatomicalSite,
       composition = bio.composition,
       concentrationMgPerMl = bio.concentrationMgPerMl,
       createdAt = bio.createdAt,
@@ -48,29 +48,38 @@ object PBEntityConverter {
       externalSampleId = bio.externalSampleId,
       kfId = bio.kfId,
       modifiedAt = bio.modifiedAt,
-      sequencingCenterId = bio.sequencingCenterId,
+      ncitIdAnatomicalSite = bio.ncitIdAnatomicalSite,
+      ncitIdTissueType = bio.ncitIdTissueType,
       shipmentDate = bio.shipmentDate,
       shipmentOrigin = bio.shipmentOrigin,
-      tissueType = bio.tissueType,
-      tumorDescriptor = bio.tumorDescriptor,
-      uberonId = bio.uberonId,
-      volumeMl = bio.volumeMl
+      genomicFiles = bio.genomicFiles,
+      participantId = bio.participantId,
+      sourceTextTumorDescriptor = bio.sourceTextTumorDescriptor,
+      sourceTextTissueType = bio.sourceTextTissueType,
+      sourceTextAnatomicalSite = bio.sourceTextAnatomicalSite,
+      spatialDescriptor = bio.spatialDescriptor,
+      uberonIdAnatomicalSite = bio.uberonIdAnatomicalSite,
+      volumeMl = bio.volumeMl,
+      sequencingCenterId = bio.sequencingCenterId
     )
   }
   
   def EDiagnosisToDiagnosisES(diagnosis: EDiagnosis): Diagnosis_ES = {
     Diagnosis_ES(
       ageAtEventDays = diagnosis.ageAtEventDays,
-      diagnosisCategory = diagnosis.diagnosisCategory,
       createdAt = diagnosis.createdAt,
-      diagnosis = diagnosis.diagnosis,
-      modifiedAt = diagnosis.modifiedAt,
+      diagnosisCategory = diagnosis.diagnosisCategory,
       externalId = diagnosis.externalId,
+      icdIdDiagnosis = diagnosis.icdIdDiagnosis,
       kfId = diagnosis.kfId,
-      tumorLocation = diagnosis.tumorLocation,
-      acdId = diagnosis.acdId,
-      mondoId = diagnosis.mondoId,
-      uberonId = diagnosis.uberonId
+      modifiedAt = diagnosis.modifiedAt,
+      mondoIdDiagnosis = diagnosis.mondoIdDiagnosis,
+      participantId = diagnosis.participantId,
+      sourceTextDiagnosis = diagnosis.sourceTextDiagnosis,
+      uberonIdTumorLocation = diagnosis.uberonIdTumorLocation,
+      sourceTextTumorLocation = diagnosis.sourceTextTumorLocation,
+      ncitIdDiagnosis = diagnosis.ncitIdDiagnosis,
+      spatialDescriptor = diagnosis.spatialDescriptor
     )
   }
   
@@ -98,7 +107,8 @@ object PBEntityConverter {
       modifiedAt = gf.modifiedAt,
       sequencingExperiment = seqExps,
       referenceGenome = gf.referenceGenome,
-      isHarmonized = gf.isHarmonized
+      isHarmonized = gf.isHarmonized,
+      availability = gf.availability
     )
   }
 
@@ -114,7 +124,8 @@ object PBEntityConverter {
       modifiedAt = gf.modifiedAt,
 //      sequencing_experiments = ???
       referenceGenome = gf.referenceGenome,
-      isHarmonized = gf.isHarmonized
+      isHarmonized = gf.isHarmonized,
+      availability = gf.availability
     )
   }
 
@@ -151,7 +162,7 @@ object PBEntityConverter {
       kfId = genomicFile.kfId,
       modifiedAt = genomicFile.modifiedAt,
       sequencingExperiments = seqExps,
-//      repeated Participant_ES participants = 9;
+//      repeated Participant_ES participants = 9,
       referenceGenome = genomicFile.referenceGenome,
       isHarmonized = genomicFile.isHarmonized
     )
