@@ -2,11 +2,13 @@ package io.kf.etl.context
 
 import java.net.{InetAddress, URL}
 
+import com.amazonaws.auth.profile.ProfileCredentialsProvider
+import com.amazonaws.services.s3.{AmazonS3, AmazonS3ClientBuilder}
 import com.typesafe.config.ConfigFactory
 import io.kf.etl.common.Constants._
 import io.kf.etl.common.conf._
 import io.kf.etl.common.context.ContextTrait
-import io.kf.etl.common.url.ClasspathURLEnabler
+import io.kf.etl.common.url.KfURLEnabler
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.FileSystem
 import org.apache.spark.sql.SparkSession
@@ -15,7 +17,7 @@ import org.elasticsearch.common.settings.Settings
 import org.elasticsearch.common.transport.TransportAddress
 import org.elasticsearch.transport.client.PreBuiltTransportClient
 
-object Context extends ContextTrait with ClasspathURLEnabler{
+object Context extends ContextTrait with KfURLEnabler{
   lazy val hdfs = getHDFS()
   lazy val rootPath = getRootPath()
   lazy val sparkSession = getSparkSession()
@@ -23,6 +25,7 @@ object Context extends ContextTrait with ClasspathURLEnabler{
   lazy val mysql = getMysql()
   lazy val esClient = getESClient()
   lazy val dataService = getDataService()
+  lazy val awsS3 = getAWS()
 
   override def loadConfig(): KFConfig = {
 
@@ -96,5 +99,9 @@ object Context extends ContextTrait with ClasspathURLEnabler{
 
   private def getMysql(): MysqlConfig = {
     config.mysqlConfig
+  }
+
+  private def getAWS(): AmazonS3 = {
+    AmazonS3ClientBuilder.standard().withCredentials(new ProfileCredentialsProvider(config.awsConfig.s3.profile)).build()
   }
 }

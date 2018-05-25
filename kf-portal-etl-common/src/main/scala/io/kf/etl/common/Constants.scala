@@ -20,6 +20,7 @@ object Constants {
   val CONFIG_NAME_DATASERVICE_URL = s"${ROOT_PACKAGE}.dataservice.url"
   val CONFIG_NAME_HDFS_FS = s"${ROOT_PACKAGE}.hdfs.defaultFS"
   val CONFIG_NAME_HDFS_PATH = s"${ROOT_PACKAGE}.hdfs.root"
+  val CONFIG_NAME_AWS_S3_PROFILE = s"${ROOT_PACKAGE}.aws.s3.profile"
   val CONFIG_NAME_PROCESSORS = s"${ROOT_PACKAGE}.processors"
   val CONFIG_NAME_PIPELINE = s"${ROOT_PACKAGE}.pipeline"
   val CONFIG_NAME_POSTGRESQL_HOST = s"${ROOT_PACKAGE}.${POSTGRESQL}.host"
@@ -35,11 +36,16 @@ object Constants {
   val CONFIG_NAME_DUMP_PATH = "dump_path"
   val CONFIG_NAME_WRITE_INTERMEDIATE_DATA = "write_intermediate_data"
   val CONFIG_NAME_HPO = s"${ROOT_PACKAGE}.hpo"
+  val CONFIG_NAME_ALIASACTIONENABLED = "aliasActionEnabled"
+  val CONFIG_NAME_ALIASHANDLERCLASS = "aliasHandlerClass"
+  val DEFAULT_ALIASHANDLERCLASS = "io.kf.etl.processors.index.posthandler.impl.ReplaceIndexInAlias"
+  val DEFAULT_FILE_CENTRIC_ALIAS = "file_centric"
+  val DEFAULT_PARTICIPANT_CENTRIC_ALIAS = "participant_centric"
   val HPO_REF_DATA = "hpo_ref"
   val HPO_GRAPH_PATH = "graph_path"
 
-  val FILE_CENTRIC_PROCESSOR_NAME = "file_centric"
-  val PARTICIPANT_CENTRIC_PROCESSOR_NAME = "participant_centric"
+  val FILE_CENTRIC_PROCESSOR_NAME = DEFAULT_FILE_CENTRIC_ALIAS
+  val PARTICIPANT_CENTRIC_PROCESSOR_NAME = DEFAULT_PARTICIPANT_CENTRIC_ALIAS
   val RELEASE_TAG = "release_tag"
   val RELEASE_TAG_CLASS_NAME = "release_tag_class_name"
 
