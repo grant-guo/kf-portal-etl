@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  hpo:
+    build:
+      context: ./hpo
+      dockerfile: Dockerfile
+      args:
+        HPO_SQL_FILE_NAME: MYHPO_03_2018.sql
+    image: kids-first/hpo:0.0.1
+    container_name: kf-hpo
+#    hostname: kf-hpo
+    network_mode: host
+#    ports:
+#      - "3306:3306"
+
+  etl:
+    build:
+      context: ./etl
+      dockerfile: Dockerfile
+      args:
+        SPARK_MASTER: "spark://localhost:7077"
+    image: kids-first/etl:0.0.1
+    links:
+      - hpo
+      - hadoop
+    container_name: kf-etl
+#    hostname: kf-etl
+    network_mode: host
+#    ports:
+#      - "8080:8080"
+#      - "4040:4040"
+#      - "8081:8081"
+#      - "7077:7077"
+#      - "6066:6066"
+  hadoop:
+    image: sequenceiq/hadoop-docker:2.7.0
+    container_name: kf-hadoop
