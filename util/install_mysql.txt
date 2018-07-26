@@ -1,0 +1,3 @@
+shell> mysql -uroot -p 
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'MyNewPass5!'; 
+
